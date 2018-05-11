@@ -13,28 +13,23 @@ import {
   View
 } from 'react-native';
 
-import { Client, Configuration } from 'bugsnag-react-native';
+
 
 import { Provider } from 'react-redux'
-import { compose, createStore } from 'redux'
+import { compose, createStore, applyMiddleware } from 'redux'
 import todoApp from './reducers'
+import createSagaMiddleware from 'redux-saga'
+import mySaga from './sagas'
+import bugsnag from './bugsnag';
 
-const config = new Configuration('0e0c37af6f9fdedfa5d80a750be4d54d');
+const sagaMiddleware = createSagaMiddleware();
 
-const bugsnag = new Client(config);
+const store = createStore(
+  todoApp,
+  applyMiddleware(sagaMiddleware)
+);
 
-// bugsnag.notify(new Error("New Test error"));
-// x = y/
-
-
-const store = createStore(todoApp, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+sagaMiddleware.run(mySaga)
 
 type Props = {};
 export default class App extends Component<Props> {
