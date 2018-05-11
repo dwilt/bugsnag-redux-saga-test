@@ -4,7 +4,7 @@ const initialState = {
 
 export default function todoApp(state = initialState, action) {
   switch (action.type) {
-    case 'ADD_TODO':
+    case 'ADD_TODO': {
       return Object.assign({}, state, {
         todos: [
           ...state.todos,
@@ -14,6 +14,8 @@ export default function todoApp(state = initialState, action) {
           }
         ]
       })
+    }
+
     default:
       return state
   }
